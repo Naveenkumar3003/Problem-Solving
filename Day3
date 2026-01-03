@@ -1,1 +1,294 @@
+1411. Number of Ways to Paint N × 3 Grid
+You have a grid of size n x 3 and you want to paint each cell of the grid with exactly one of the three colors: Red, Yellow, 
+or Green while making sure that no two adjacent cells have the same color (i.e., no two cells that share vertical or horizontal sides have the same color).
+Given n the number of rows of the grid, return the number of ways you can paint this grid. As the answer may grow large, the answer must be computed modulo 1e9 + 7.
 
+Constraints:
+n == grid.length
+1 <= n <= 5000
+
+Input: n = 1
+Output: 12
+Explanation: There are 12 possible way to paint the grid as shown.
+
+Input: n = 5000
+Output: 30228214
+
+Step1:
+We have 3 colors:
+🔴 Red (R), 🟡 Yellow (Y), 🟢 Green (G)
+
+And 1 row with 3 columns.
+
+🔹 TYPE A – All 3 colors are different
+
+Pattern:
+
+C1  C2  C3
+(all different)
+
+Step-by-step counting
+
+For 1st cell → choose any of 3 colors
+
+For 2nd cell → choose any of remaining 2 colors
+
+For 3rd cell → choose the last remaining color
+
+👉 Total ways:
+
+3 × 2 × 1 = 6
+
+Examples (all permutations of 3 colors):
+R Y G
+R G Y
+Y R G
+Y G R
+G R Y
+G Y R
+
+
+✅ So Type A = 6
+
+🔹 TYPE B – First and third same, middle different
+
+(no adjacent same)
+
+Pattern:
+
+C1  C2  C1
+
+
+⚠️ Middle must be different from sides.
+
+Step-by-step counting
+
+Choose color for C1 & C3 → 3 choices
+
+Choose color for C2 → must be different from C1
+→ 2 choices
+
+👉 Total ways:
+
+3 × 2 = 6
+
+Examples:
+R Y R
+R G R
+Y R Y
+Y G Y
+G R G
+G Y G
+
+
+✅ So Type B = 6
+
+🧠 Final Summary
+Pattern Type	Formula	Ways
+Type A (ABC)	3×2×1	6
+Type B (ABA)	3×2	6
+
+That’s why for row 1:
+
+Type A = 6
+Type B = 6
+Total = 12
+
+
+Step2:
+What does “transition” mean?
+
+We already painted row i-1.
+Now we want to paint row i such that:
+
+✔ No two adjacent horizontal cells in the same row are same
+✔ No two adjacent vertical cells (same column) are same
+
+We only care about the pattern type of the previous row:
+
+Type A → all 3 colors different (ABC)
+
+Type B → first and third same (ABA)
+
+🟦 Case 1: Previous Row = Type A (ABC)
+
+Example previous row:
+
+R  Y  G
+
+➤ New Row as Type A (ABC)
+
+New row also has 3 different colors.
+
+Each column color must be different from the color above it.
+
+Let’s try all valid permutations and count.
+
+From experience (or careful checking), only 2 permutations satisfy:
+
+New row ≠ same color in same column
+
+
+Example valid:
+
+G R Y
+Y G R
+
+
+❌ Other permutations violate at least one column.
+
+✅ Type A → Type A = 2 ways
+
+➤ New Row as Type B (ABA)
+
+Pattern:
+
+X  Y  X
+
+
+Constraints:
+
+X ≠ Y
+
+X ≠ column1 above
+
+Y ≠ column2 above
+
+X ≠ column3 above
+
+Try possibilities → only 2 valid ways exist.
+
+Example valid:
+
+Y G Y
+G R G
+
+
+✅ Type A → Type B = 2 ways
+
+🟨 Case 2: Previous Row = Type B (ABA)
+
+Example:
+
+R  Y  R
+
+➤ New Row as Type A (ABC)
+
+All 3 colors different.
+
+Check permutations carefully → only 2 permutations work that don’t clash vertically.
+
+Example:
+
+Y R G
+G R Y
+
+
+✅ Type B → Type A = 2 ways
+
+➤ New Row as Type B (ABA)
+
+Pattern:
+
+X  Y  X
+
+
+Conditions:
+
+X ≠ Y
+
+X ≠ column1 above
+
+Y ≠ column2 above
+
+X ≠ column3 above
+
+Here we get more flexibility than previous cases.
+
+Careful counting gives 3 valid ways.
+
+Example:
+
+Y R Y
+G R G
+Y G Y
+
+
+✅ Type B → Type B = 3 ways
+
+📊 Final Transition Table (PROVEN)
+Previous	New A	New B
+Type A	2	2
+Type B	2	3
+🧠 Why this abstraction works
+
+Instead of tracking exact colors, we track pattern types.
+This reduces a huge problem into simple DP with 2 states.
+
+
+Code:
+Brute(Recursion):
+
+class Solution {
+public:
+    static const int MOD = 1e9 + 7;
+
+    long long fA(int n) {
+        if (n == 1) return 6;
+        return (2 * fA(n - 1) + 2 * fB(n - 1)) % MOD;
+    }
+
+    long long fB(int n) {
+        if (n == 1) return 6;
+        return (2 * fA(n - 1) + 3 * fB(n - 1)) % MOD;
+    }
+
+    int numOfWays(int n) {
+        return (fA(n) + fB(n)) % MOD;
+    }
+};
+
+
+Memoization:
+
+class Solution{
+public:
+  static const int MOD = 1e9+7;
+  long long dpA[5001];
+  long long dpB[5001];
+
+  long long fA(int n){
+        if(n==1) return 6;
+        if(dpA[n]!=-1) return dpA[n];
+        return dpA[n]=(2 * fA(n - 1) + 2 * fB(n - 1)) % MOD;
+  }
+  long long fB(int n) {
+        if (n == 1) return 6;
+        if (dpB[n]!=-1) return dpB[n];
+        return dpB[n]=(2 * fA(n - 1) + 3 * fB(n - 1)) % MOD;
+    }
+  int numOfWays(int n) {
+        memset(dpA, -1, sizeof(dpA));
+        memset(dpB, -1, sizeof(dpB));
+        return (fA(n) + fB(n)) % MOD;
+    }
+};
+
+
+Tabulation:
+
+class Solution {
+public:
+    int numOfWays(int n) {
+        int const MOD=1e9+7;
+        long long A[n+1],B[n+1];
+        A[1]=6;
+        B[1]=6;
+
+        for(int i=2;i<=n;i++){
+            A[i]=(2*A[i-1]+2*B[i-1])%MOD;
+            B[i]=(2*A[i-1]+3*B[i-1])%MOD;
+        }
+        return (A[n]+B[n])%MOD;
+    }
+};
