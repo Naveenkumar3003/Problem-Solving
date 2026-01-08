@@ -1,1 +1,43 @@
 1458. Max Dot Product of Two Subsequences
+
+Idea
+
+At any index (i, j) we have three choices:
+Take both nums1[i] and nums2[j]
+Skip nums1[i]
+Skip nums2[j]
+
+❗ Important
+
+When we take both:
+Either start a new subsequence
+Or extend an existing one
+
+Recursion:
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int solve(int i, int j, vector<int>& nums1, vector<int>& nums2) {
+    // Base case: one array finished → invalid (non-empty required)
+    if (i == nums1.size() || j == nums2.size())
+        return INT_MIN;
+
+    // Option 1: take both elements
+    int take = nums1[i] * nums2[j] + 
+               max(0, solve(i + 1, j + 1, nums1, nums2));
+
+    // Option 2: skip element from nums1
+    int skip1 = solve(i + 1, j, nums1, nums2);
+
+    // Option 3: skip element from nums2
+    int skip2 = solve(i, j + 1, nums1, nums2);
+
+    return max({take, skip1, skip2});
+}
+
+int maxDotProduct(vector<int>& nums1, vector<int>& nums2) {
+    return solve(0, 0, nums1, nums2);
+}
+
+
