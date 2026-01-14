@@ -1,0 +1,99 @@
+class Solution {
+public:
+    struct Event {
+        double y, x1, x2;
+        int type; // +1 add, -1 remove
+    };
+
+    double separateSquares(vector<vector<int>>& squares) {
+        vector<Event> events;
+
+        for (auto &s : squares) {
+            double x = s[0], y = s[1], l = s[2];
+            events.push_back({y, x, x + l, +1});
+            events.push_back({y + l, x, x + l, -1});
+        }
+
+        sort(events.begin(), events.end(),
+             [](const Event& a, const Event& b) {
+                 return a.y < b.y;
+             });
+
+        map<pair<double,double>, int> active;
+        vector<pair<double,double>> slices; // (y, area so far)
+
+        auto unionWidth = [&]() {
+            vector<pair<double,double>> segs;
+            for (auto &p : active)
+                if (p.second > 0)
+                    segs.push_back(p.first);
+
+            if (segs.empty()) return 0.0;
+
+            sort(segs.begin(), segs.end());
+            double total = 0;
+            double curL = segs[0].first, curR = segs[0].second;
+
+            for (int i = 1; i < segs.size(); i++) {
+                if (segs[i].first > curR) {
+                    total += curR - curL;
+                    curL = segs[i].first;
+                    curR = segs[i].second;
+                } else {
+                    curR = max(curR, segs[i].second);
+                }
+            }
+            total += curR - curL;
+            return total;
+        };
+
+        double prevY = events[0].y;
+        double area = 0;
+
+        for (auto &e : events) {
+            double dy = e.y - prevY;
+            if (dy > 0) {
+                double width = unionWidth();
+                area += width * dy;
+                slices.push_back({prevY, area});
+            }
+
+            active[{e.x1, e.x2}] += e.type;
+            if (active[{e.x1, e.x2}] == 0)
+                active.erase({e.x1, e.x2});
+
+            prevY = e.y;
+        }
+
+        double total = area;
+        double target = total / 2;
+
+        // Find minimum y where area >= target
+        double curArea = 0;
+        prevY = events[0].y;
+        active.clear();
+        int idx = 0;
+
+        for (auto &e : events) {
+            double dy = e.y - prevY;
+            if (dy > 0) {
+                double width = unionWidth();
+                double sliceArea = width * dy;
+
+                if (curArea + sliceArea >= target) {
+                    double remain = target - curArea;
+                    return prevY + remain / width;
+                }
+                curArea += sliceArea;
+            }
+
+            active[{e.x1, e.x2}] += e.type;
+            if (active[{e.x1, e.x2}] == 0)
+                active.erase({e.x1, e.x2});
+
+            prevY = e.y;
+        }
+
+        return prevY;
+    }
+};
