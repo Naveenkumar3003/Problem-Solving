@@ -1,0 +1,35 @@
+Problem in Simple Words
+
+You are given a character array chars.
+  You must:
+    Compress consecutive repeating characters
+    Write the compressed result back into the same array
+    Return the new length
+    
+ ⚠️ You must not use extra space (no new arrays / strings).
+ 🔑 Key Rules
+
+For each group of same characters:
+
+If count = 1 → write only the character
+If count > 1 → write character + digits of count
+
+Example: 12 → '1', '2'
+
+💡 Core Technique: Two Pointers
+We use:
+read → to scan the array
+write → to overwrite the array with compressed result
+
+✅ Optimal Strategy (O(n), O(1) space)
+Steps:
+
+Start reading from index 0
+Count how many times the current character repeats
+
+Write:
+
+the character
+the count (if > 1), digit by digit
+
+Move to next group
