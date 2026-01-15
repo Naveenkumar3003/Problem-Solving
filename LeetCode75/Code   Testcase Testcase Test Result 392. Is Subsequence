@@ -1,0 +1,5 @@
+Problem in Simple Words
+
+You are given two strings: s and t
+Check whether all characters of s appear in t in the same order
+Characters do not need to be contiguous
