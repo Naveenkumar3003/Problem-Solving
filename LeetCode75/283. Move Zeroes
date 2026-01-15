@@ -1,0 +1,4 @@
+Problem in Simple Words
+  Move all 0s to the end
+  Keep the relative order of non-zero elements
+  In-place (no extra array)
