@@ -23,4 +23,35 @@ Code:
         nums[index++] = 0;
  }
 
+✔ In-place
+✔ Preserves order
+⏱ O(n)
 
+🟩 3️⃣ OPTIMAL (Single Pass, Minimal Writes) ✅🔥
+🔑 Core Idea
+
+Maintain pointers (left,right)
+Swap only when needed
+
+✅ Optimal C++ Code (Interview Favorite)
+
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int left = 0;
+
+        for (int right = 0; right < nums.size(); right++) {
+            if (nums[right] != 0) {
+                swap(nums[right], nums[left]);
+                left++;
+            }
+        }        
+    }
+};
+
+Complexity
+| Type  | Value    |
+| ----- | -------- |
+| Time  | **O(n)** |
+| Space | **O(1)** |
