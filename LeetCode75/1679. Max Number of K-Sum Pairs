@@ -40,3 +40,43 @@ public:
         return count;
     }
 };
+
+Complexity
+Time: O(n log n)
+Space: O(1)
+
+
+🟩 3️⃣ OPTIMAL (Hash Map, O(n)) 🔥
+
+🔑 Core Idea
+  For each number x, look for k - x
+  If it exists → form a pair
+  Else → store x for future
+
+Optimal C++ Code
+class Solution {
+public:
+    int maxOperations(vector<int>& nums, int k) {
+        unordered_map<int, int> freq;
+        int count = 0;
+
+        for (int num : nums) {
+            int need = k - num;
+
+            if (freq[need] > 0) {
+                count++;
+                freq[need]--;
+            } else {
+                freq[num]++;
+            }
+        }
+        return count;
+    }
+};
+
+| Approach              | Time       | Space    |
+| --------------------- | ---------- | -------- |
+| Brute                 | O(n²)      | O(1)     |
+| Sort + 2P             | O(n log n) | O(1)     |
+| **HashMap (Optimal)** | **O(n)**   | **O(n)** |
+
