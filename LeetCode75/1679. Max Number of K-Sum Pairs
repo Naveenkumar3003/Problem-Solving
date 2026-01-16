@@ -1,0 +1,42 @@
+🟥 1️⃣ Brute Force (O(n²)) ❌
+
+Idea
+  Try every possible pair
+  Mark used elements
+
+❌ Too slow for n = 10⁵
+
+
+🟨 2️⃣ Better (Sorting + Two Pointers) ✅
+Idea
+  Sort the array
+  Use two pointers:
+  l → smallest
+  r → largest
+  Compare nums[l] + nums[r] with k
+
+class Solution {
+public:
+    int maxOperations(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        int l = 0, r = nums.size() - 1;
+        int count = 0;
+
+        while (l < r) {
+            int sum = nums[l] + nums[r];
+
+            if (sum == k) {
+                count++;
+                l++;
+                r--;
+            }
+            else if (sum < k) {
+                l++;
+            }
+            else {
+                r--;
+            }
+        }
+        return count;
+    }
+};
