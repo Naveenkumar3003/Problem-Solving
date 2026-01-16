@@ -1,0 +1,26 @@
+Problem in Simple Words
+
+You are given two strings: s and t
+Check whether all characters of s appear in t in the same order
+Characters do not need to be contiguous
+
+Key Idea (Two Pointers)
+
+Use:
+
+sp → pointer for string s
+tp → pointer for string t
+
+Move through t and try to match characters of s.
+
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int sp=0,tp=0;
+        while(sp<s.length() && tp<t.length()){
+            if(s[sp]==t[tp]) sp++;
+            tp++;
+        }
+        return sp==s.length();
+    }
+};
