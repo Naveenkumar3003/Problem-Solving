@@ -1,1 +1,30 @@
-
+class Solution {
+public:
+    bool lower(char c){
+        if(c>='a' && c<='z') return true;
+        return false;
+    }
+    bool upper(char c){
+        if(c>='A' && c<='Z') return true;
+        return false;
+    }
+    int numberOfSpecialChars(string word) {
+        vector<int> lastLower(26,-1);
+        vector<int> firstUpper(26,-1);
+        for(int i=0;i<word.size();i++){
+            if(lower(word[i])) {
+                lastLower[word[i]-'a']=i;
+                }
+            if(upper(word[i])){
+                if(firstUpper[word[i]-'A']==-1)
+                    firstUpper[word[i]-'A']=i;
+            }
+        }
+        int cnt=0;
+        for(int i=0;i<26;i++){
+            if(lastLower[i]!=-1 && firstUpper[i]!=-1 && firstUpper[i]>lastLower[i]) 
+                cnt++;
+        }
+        return cnt;
+    }
+};
