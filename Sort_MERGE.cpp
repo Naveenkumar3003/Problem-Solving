@@ -50,3 +50,5 @@ int main()
     }
     return 0;
 }
+
+// TC - O(nlogn) , SC - O(N)
