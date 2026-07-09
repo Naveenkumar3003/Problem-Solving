@@ -18,3 +18,5 @@ int main() {
     }
     return 0;
 }
+
+//TC - O(n) best , O(n^2) avg and worst , SC -O(1)
