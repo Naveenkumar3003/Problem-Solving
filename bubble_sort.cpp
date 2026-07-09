@@ -23,3 +23,4 @@ int main() {
     }
     return 0;
 }
+//TC - O(n^2) - (worst,avg), O(N) - best, SC - O(1)
