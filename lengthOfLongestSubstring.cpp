@@ -9,6 +9,7 @@ public:
             if(mpp[s[r]]==0){
                 mpp[s[r]]=1;
                 r++;
+                maxLen = max(maxLen, r-l);
             }
             else{
                 maxLen=max(maxLen,r-l);
@@ -16,7 +17,6 @@ public:
                 l++;
             }
         }
-        maxLen = max(maxLen, r-l);
         return maxLen;
 
     }
