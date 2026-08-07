@@ -1,5 +1,8 @@
 class Solution {
 public:
+        // Same as subset sum
+        // here we will find the sum first and if it is divided by then we can take that as target and check whether the target is present in the array or not
+        // if the totalsum is odd then we can't able divide by two so there will no subset exist
     // Recursion
     // bool solve(int ind,int sum,vector<int> &nums){
     //     if(sum==0) return 0;
