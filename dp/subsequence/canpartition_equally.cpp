@@ -39,7 +39,7 @@ class Solution {
         for(int i=0;i<arr.size();i++){
             totalsum+=arr[i];
         }
-        ;
+  
         if(totalsum%2==1) return false;
         else{
             int target=totalsum/2;
