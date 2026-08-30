@@ -45,6 +45,24 @@ class Solution {
         }
         return dp[0][0];
     }*/
+    
+    /*
+    int lis(vector<int>& arr) {
+        int n = arr.size();
+
+        vector<int> dp(n, 1);
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (arr[j] < arr[i]) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+
+        return *max_element(dp.begin(), dp.end());
+    }
+    */
     int lowerBound(vector<int>& arr, int target) {
         int n=arr.size();
         int ans=n;
