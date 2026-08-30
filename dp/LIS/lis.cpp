@@ -30,7 +30,7 @@ class Solution {
         return liseq(0,-1,arr,dp);
     }*/
     
-    int lis(vector<int>& arr) {
+    /*int lis(vector<int>& arr) {
         int n=arr.size();
         vector<vector<int>> dp(n+1,vector<int>(n+1,0));
         for(int ind=n-1;ind>=0;ind--){
@@ -44,5 +44,35 @@ class Solution {
             }
         }
         return dp[0][0];
+    }*/
+    int lowerBound(vector<int>& arr, int target) {
+        int n=arr.size();
+        int ans=n;
+        int low=0,high=n-1;
+        int mid;
+        while(low<=high){
+            mid=(low+high)/2;
+            if(arr[mid]>=target){
+                ans=mid;
+                high=mid-1;
+            }
+            else{
+                low=mid+1;
+            }
+        }
+        return ans;
+    }
+    int lis(vector<int>& arr) {
+        vector<int> temp;
+        for(int i=0;i<arr.size();i++){
+            int pos=lowerBound(temp,arr[i]);
+            if(pos==temp.size()){
+                temp.push_back(arr[i]);
+            }
+            else{
+                temp[pos]=arr[i];
+            }
+        }
+        return temp.size();
     }
 };
